@@ -1,0 +1,45 @@
+// File: backend/prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// Bảng Khách hàng
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  fullName  String
+  password  String?
+  role      String    @default("user") // "user" hoặc "admin"
+  
+  bookings  Booking[]
+}
+
+// Bảng Tour du lịch
+model Tour {
+  id              String    @id @default(uuid())
+  title           String
+  price           Float
+  availableSeats  Int
+  type            String    // "domestic" hoặc "international"
+  
+  bookings        Booking[]
+}
+
+// Bảng Đặt chỗ
+model Booking {
+  id          String   @id @default(uuid())
+  userId      String
+  tourId      String
+  totalPrice  Float
+  status      String   @default("pending") // pending, success, cancelled
+
+  user        User     @relation(fields: [userId], references: [id])
+  tour        Tour     @relation(fields: [tourId], references: [id])
+}
