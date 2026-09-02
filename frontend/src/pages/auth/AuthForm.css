@@ -1,0 +1,117 @@
+/* AuthStyles.css */
+@import "tailwindcss";
+
+@layer components {
+    .auth-dark-bg {
+        @apply min-h-screen w-full bg-[#070d0f] text-white flex items-center justify-center p-4 relative overflow-hidden font-sans;
+    }
+
+    .auth-bg-decor {
+        @apply absolute inset-0 bg-cover bg-center opacity-30 mix-blend-luminosity;
+        background-image: url('https://images.unsplash.com/photo-1433086966358-54859d0ed716?q=80&w=1920&auto=format&fit=crop');
+        animation: slowZoom 30s ease-in-out infinite alternate;
+        /* Áp dụng Animation */
+    }
+
+    .auth-card-glass {
+        @apply relative z-10 w-full max-w-[1050px] h-[640px] bg-black/40 backdrop-blur-2xl border border-white/15 rounded-[2.5rem] shadow-[0_25px_70px_#000000cc] flex flex-col md:flex-row overflow-hidden;
+    }
+
+    /* Form & Image Split Sections */
+    .auth-form-side {
+        @apply w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center relative z-10 bg-black/20;
+    }
+
+    .auth-img-side {
+        @apply hidden md:block md:w-1/2 p-3 relative;
+    }
+
+    .auth-img-inner {
+        @apply w-full h-full rounded-[1.8rem] overflow-hidden relative border border-white/10;
+    }
+
+    .auth-img {
+        @apply w-full h-full object-cover;
+    }
+
+    .auth-img-overlay {
+        @apply absolute inset-0 bg-gradient-to-t from-[#070d0f] via-black/30 to-transparent;
+    }
+
+    /* Components */
+    .auth-back-btn {
+        @apply absolute top-8 left-8 p-2.5 bg-white/5 hover:bg-white/15 border border-white/10 rounded-full transition text-gray-300 z-20 backdrop-blur-md;
+    }
+
+    .auth-toggle-pill {
+        @apply absolute top-8 right-8 flex bg-white/10 backdrop-blur-md border border-white/10 rounded-full p-1 z-20;
+    }
+
+    .toggle-btn-active {
+        @apply px-4 py-1.5 rounded-full bg-emerald-400 text-gray-950 text-xs font-bold shadow-md;
+    }
+
+    .toggle-btn-inactive {
+        @apply px-4 py-1.5 rounded-full text-gray-300 text-xs font-medium hover:text-white transition;
+    }
+
+    /* Form Inputs */
+    .auth-input-label {
+        @apply block text-xs font-medium text-gray-400 mb-1.5 ml-1;
+    }
+
+    .auth-input-field {
+        @apply w-full px-4 py-3 bg-white/5 border border-white/15 rounded-2xl outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 transition text-white placeholder-gray-500 text-sm;
+    }
+
+    .auth-primary-btn {
+        @apply w-full py-3.5 bg-emerald-400 hover:bg-emerald-300 text-gray-950 rounded-2xl font-bold shadow-[0_0_25px_#34d3994d] transition-all text-sm mt-2;
+    }
+
+    .auth-social-btn {
+        @apply w-10 h-10 rounded-full bg-white/5 border border-white/15 flex items-center justify-center hover:bg-white/15 transition text-gray-300;
+    }
+}
+
+/* Hiệu ứng Background Zoom & Form Slide */
+@keyframes slowZoom {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1.1);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.anim-left {
+    animation: slideInLeft 0.5s ease-out forwards;
+}
+
+.anim-right {
+    animation: slideInRight 0.5s ease-out forwards;
+}
