@@ -1,34 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Play, Calendar, MapPin, Users, Star, ArrowRight, ShieldCheck } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import './HomePage.css'; // Import CSS riêng cho trang chủ
+import './HomePage.css';
 
 export const HomePage: React.FC = () => {
     const navigate = useNavigate();
 
-    // ==========================================
-    // TODO: KHAI BÁO STATE CHO DỮ LIỆU TỪ API
-    // ==========================================
     const [promoBanners, setPromoBanners] = useState([]);
     const [trendingTours, setTrendingTours] = useState([]);
     const [suggestedTours, setSuggestedTours] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    // ==========================================
-    // TODO: GỌI API KHI COMPONENT MOUNT
-    // ==========================================
     useEffect(() => {
         const fetchHomePageData = async () => {
             try {
-                // Ví dụ call API:
-                // const bannerRes = await api.get('/banners');
-                // const trendingRes = await api.get('/trending');
-                // const suggestionRes = await api.get('/suggestions');
-
-                // setPromoBanners(bannerRes.data);
-                // setTrendingTours(trendingRes.data);
-                // setSuggestedTours(suggestionRes.data);
-
+                // Giả lập call API
                 setIsLoading(false);
             } catch (error) {
                 console.error("Lỗi khi fetch dữ liệu HomePage:", error);
@@ -41,28 +27,29 @@ export const HomePage: React.FC = () => {
 
     return (
         <div className="flex flex-col w-full h-full">
-            {/* 1. HERO SECTION (Giữ nguyên thiết kế) */}
+            {/* 1. HERO SECTION */}
             <div className="hero-grid">
                 <div className="hero-text-col">
-                    <div className="badge-tag">
+                    <div className="badge-tag animate-fade-in-up">
                         <ShieldCheck className="w-4 h-4" /> TOP DESTINATIONS 2026
                     </div>
 
-                    <h1 className="hero-headline">
+                    <h1 className="hero-headline animate-fade-in-up delay-100">
                         Explore Nature's <br />
                         <span className="hero-headline-highlight">Hidden Wonders</span>
                     </h1>
 
-                    <p className="hero-subtext">
+                    <p className="hero-subtext animate-fade-in-up delay-200">
                         Indulge in pristine nature expeditions, from cloud-kissed peaks to magnificent waterfalls. Reserve your voyage today.
                     </p>
 
-                    <div className="hero-actions">
-                        <button onClick={() => navigate('/search')} className="btn-explore">
+                    <div className="hero-actions animate-fade-in-up delay-300">
+                        {/* Đã thay đổi hover:scale-105 thành hover:-translate-y-1 và thêm cursor-pointer */}
+                        <button onClick={() => navigate('/search')} className="btn-explore cursor-pointer hover:-translate-y-1">
                             Discover Now <ArrowRight className="w-5 h-5" />
                         </button>
 
-                        <button className="btn-watch-demo">
+                        <button className="btn-watch-demo cursor-pointer hover:-translate-y-1">
                             <div className="w-8 h-8 rounded-full bg-emerald-400/20 flex items-center justify-center text-emerald-400">
                                 <Play className="w-4 h-4 fill-emerald-400" />
                             </div>
@@ -71,7 +58,7 @@ export const HomePage: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="widget-card">
+                <div className="widget-card animate-fade-in-right delay-200 hover:shadow-[0_20px_60px_-10px_#10b98133] transition-shadow duration-500">
                     <div className="widget-header">
                         <div>
                             <span className="text-xs text-emerald-400 font-semibold tracking-widest uppercase">Featured Tour</span>
@@ -84,7 +71,7 @@ export const HomePage: React.FC = () => {
                     </div>
 
                     <div className="space-y-3 mb-6">
-                        <div className="input-box-dark">
+                        <div className="input-box-dark transition-transform hover:-translate-y-1 cursor-pointer">
                             <MapPin className="w-5 h-5 text-emerald-400" />
                             <div>
                                 <p className="text-[10px] text-gray-400 uppercase">Destination</p>
@@ -93,14 +80,14 @@ export const HomePage: React.FC = () => {
                         </div>
 
                         <div className="grid grid-cols-2 gap-3">
-                            <div className="input-box-dark">
+                            <div className="input-box-dark transition-transform hover:-translate-y-1 cursor-pointer">
                                 <Calendar className="w-5 h-5 text-emerald-400" />
                                 <div>
                                     <p className="text-[10px] text-gray-400 uppercase">Departure</p>
                                     <p className="font-medium text-white">October 15th</p>
                                 </div>
                             </div>
-                            <div className="input-box-dark">
+                            <div className="input-box-dark transition-transform hover:-translate-y-1 cursor-pointer">
                                 <Users className="w-5 h-5 text-emerald-400" />
                                 <div>
                                     <p className="text-[10px] text-gray-400 uppercase">Guests</p>
@@ -115,39 +102,34 @@ export const HomePage: React.FC = () => {
                             <p className="text-xs text-gray-400">All-inclusive from</p>
                             <p className="price-highlight">$299 <span className="text-xs font-normal text-gray-400">/ person</span></p>
                         </div>
-                        <button onClick={() => navigate('/register')} className="px-6 py-3 bg-emerald-400 hover:bg-emerald-300 text-gray-950 font-bold rounded-xl transition-all shadow-lg">
+                        {/* Đã thay đổi hover:scale-105 thành hover:-translate-y-1 và thêm cursor-pointer */}
+                        <button onClick={() => navigate('/register')} className="px-6 py-3 bg-emerald-400 hover:bg-emerald-300 text-gray-950 font-bold rounded-xl transition-all shadow-lg cursor-pointer hover:-translate-y-1">
                             Reserve Now
                         </button>
                     </div>
                 </div>
             </div>
 
-            {/* 2. DYNAMIC CONTENT SECTIONS (Chờ API) */}
+            {/* 2. DYNAMIC CONTENT SECTIONS */}
             <div className="api-section-container">
 
-                {/* Section: Banner Khuyến Mãi */}
-                <section>
+                <section className="animate-fade-in-up delay-400">
                     <h2 className="text-2xl font-bold text-white mb-4">Banner Khuyến mãi</h2>
-                    <div className="api-section">
-                        {/* TODO: Map data banner vào đây (Ví dụ dạng Swiper/Carousel) */}
+                    <div className="api-section hover:border-emerald-400/50 transition-colors cursor-pointer">
                         <p>Khu vực map danh sách Banner quảng cáo/Khuyến mãi</p>
                     </div>
                 </section>
 
-                {/* Section: Trending / Ưu đãi */}
-                <section>
+                <section className="animate-fade-in-up delay-500">
                     <h2 className="text-2xl font-bold text-white mb-4">Trending / Ưu đãi</h2>
-                    <div className="api-section">
-                        {/* TODO: Map data danh sách Tour Trending dạng Card Grid vào đây */}
+                    <div className="api-section hover:border-emerald-400/50 transition-colors cursor-pointer">
                         <p>Khu vực map danh sách Tour thịnh hành, giảm giá</p>
                     </div>
                 </section>
 
-                {/* Section: Gợi ý theo sở thích */}
-                <section>
+                <section className="animate-fade-in-up delay-600">
                     <h2 className="text-2xl font-bold text-white mb-4">Gợi ý theo sở thích</h2>
-                    <div className="api-section">
-                        {/* TODO: Map data danh sách Tour được cá nhân hóa vào đây */}
+                    <div className="api-section hover:border-emerald-400/50 transition-colors cursor-pointer">
                         <p>Khu vực map danh sách Gợi ý cá nhân</p>
                     </div>
                 </section>

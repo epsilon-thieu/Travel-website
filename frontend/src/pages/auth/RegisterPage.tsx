@@ -3,8 +3,35 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, ChevronLeft, CheckCircle2 } from 'lucide-react';
 
 export const RegisterPage: React.FC = () => {
+    // Tạo state cho các trường nhập liệu
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+
     const navigate = useNavigate();
+
+    // Method xử lý submit form đăng ký
+    const handleRegister = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        // TODO: Thực hiện gọi API register ở đây
+        /* 
+        try {
+            const response = await api.register({ firstName, lastName, email, password });
+            console.log('Register success:', response);
+            // Xử lý sau khi đăng ký thành công (chuyển hướng sang trang login hoặc tự động login)
+            navigate('/login');
+        } catch (error) {
+            console.error('Register failed:', error);
+            // Hiển thị lỗi cho người dùng
+        }
+        */
+
+        // Log tạm thời để debug
+        console.log("Dữ liệu đăng ký chuẩn bị gửi đi:", { firstName, lastName, email, password });
+    };
 
     return (
         <>
@@ -34,21 +61,43 @@ export const RegisterPage: React.FC = () => {
                     <h2 className="text-3xl font-extrabold text-white mb-1">Create Account</h2>
                     <p className="text-gray-400 text-xs mb-6">Start Your Journey for Travelling Here!</p>
 
-                    <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+                    {/* Đưa hàm handleRegister vào onSubmit */}
+                    <form className="space-y-4" onSubmit={handleRegister}>
                         <div className="flex gap-3">
                             <div className="flex-1">
                                 <label className="auth-input-label">First Name</label>
-                                <input type="text" placeholder="John" className="auth-input-field" required />
+                                <input
+                                    type="text"
+                                    placeholder="John"
+                                    className="auth-input-field"
+                                    required
+                                    value={firstName}
+                                    onChange={(e) => setFirstName(e.target.value)}
+                                />
                             </div>
                             <div className="flex-1">
                                 <label className="auth-input-label">Last Name</label>
-                                <input type="text" placeholder="Doe" className="auth-input-field" required />
+                                <input
+                                    type="text"
+                                    placeholder="Doe"
+                                    className="auth-input-field"
+                                    required
+                                    value={lastName}
+                                    onChange={(e) => setLastName(e.target.value)}
+                                />
                             </div>
                         </div>
 
                         <div>
                             <label className="auth-input-label">Email</label>
-                            <input type="email" placeholder="example@gmail.com" className="auth-input-field" required />
+                            <input
+                                type="email"
+                                placeholder="example@gmail.com"
+                                className="auth-input-field"
+                                required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
                         </div>
 
                         <div>
@@ -59,6 +108,8 @@ export const RegisterPage: React.FC = () => {
                                     placeholder="••••••••••••"
                                     className="auth-input-field pr-20"
                                     required
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                 />
                                 <div className="absolute right-3 flex items-center gap-1">
                                     <button type="button" onClick={() => setShowPassword(!showPassword)} className="text-emerald-400 hover:text-emerald-300">

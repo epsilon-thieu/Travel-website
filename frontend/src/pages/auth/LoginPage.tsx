@@ -3,8 +3,33 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, ChevronLeft } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
+    // 1. Tạo state cho các trường nhập liệu
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+
     const navigate = useNavigate();
+
+    // 2. Tạo method xử lý submit form
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        // TODO: Thực hiện gọi API login ở đây
+        /* 
+        try {
+            const response = await api.login({ email, password });
+            console.log('Login success:', response);
+            // Xử lý sau khi login thành công (lưu token, chuyển hướng...)
+            navigate('/dashboard');
+        } catch (error) {
+            console.error('Login failed:', error);
+            // Hiển thị lỗi cho người dùng
+        }
+        */
+
+        // Log tạm thời để bạn dễ debug
+        console.log("Dữ liệu chuẩn bị gửi đi:", { email, password });
+    };
 
     return (
         <>
@@ -32,20 +57,32 @@ export const LoginPage: React.FC = () => {
                         <div className="flex-1 h-px bg-white/10"></div>
                     </div>
 
-                    <form className="text-left space-y-4" onSubmit={(e) => e.preventDefault()}>
+                    {/* 3. Đưa hàm handleLogin vào onSubmit của form */}
+                    <form className="text-left space-y-4" onSubmit={handleLogin}>
                         <div>
                             <label className="auth-input-label">Email</label>
-                            <input type="email" placeholder="example@gmail.com" className="auth-input-field" required />
+                            {/* 4. Thêm value và onChange cho email */}
+                            <input
+                                type="email"
+                                placeholder="example@gmail.com"
+                                className="auth-input-field"
+                                required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
                         </div>
 
                         <div>
                             <label className="auth-input-label">Password</label>
                             <div className="relative flex items-center">
+                                {/* 4. Thêm value và onChange cho password */}
                                 <input
                                     type={showPassword ? 'text' : 'password'}
                                     placeholder="••••••••••••"
                                     className="auth-input-field pr-12"
                                     required
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                 />
                                 <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 text-emerald-400 hover:text-emerald-300">
                                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -73,7 +110,7 @@ export const LoginPage: React.FC = () => {
                 </div>
 
                 <div className="auth-img-inner">
-                    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1000&auto=format&fit=crop" />
+                    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1000&auto=format&fit=crop" alt="Scenery" />
                     <div className="auth-img-overlay"></div>
 
                     <div className="absolute bottom-8 left-6 right-6 text-center text-white">
