@@ -3,7 +3,7 @@
 
 @layer components {
 
-    /* Hero Main Content */
+    /* [Giữ nguyên các class cũ của bạn ở đây] */
     .hero-grid {
         @apply grid grid-cols-1 xl:grid-cols-12 gap-8 items-center w-full;
     }
@@ -40,7 +40,6 @@
         @apply px-6 py-4 bg-white/5 hover:bg-white/10 border border-white/15 rounded-2xl text-white font-medium flex items-center gap-3 backdrop-blur-sm transition-all;
     }
 
-    /* Booking Floating Widget Card */
     .widget-card {
         @apply xl:col-span-5 bg-black/40 backdrop-blur-xl border border-white/15 rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-[0_20px_60px_-15px_#000000b3];
     }
@@ -65,12 +64,90 @@
         @apply text-3xl font-bold text-emerald-400;
     }
 
-    /* Dynamic Content Sections (Dành cho API) */
     .api-section-container {
         @apply flex flex-col gap-12 pt-16 pb-8;
     }
 
     .api-section {
         @apply border border-white/5 bg-white/[0.02] rounded-3xl p-6 flex items-center justify-center min-h-[250px] border-dashed text-gray-500;
+    }
+}
+
+/* ==========================================
+   ANIMATION CLASSES VÀ KEYFRAMES MỚI
+   ========================================== */
+@layer utilities {
+    .animate-fade-in-up {
+        opacity: 0;
+        animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    .animate-fade-in-right {
+        opacity: 0;
+        animation: fadeInRight 0.8s ease-out forwards;
+    }
+
+    .animate-fade-in {
+        opacity: 0;
+        animation: fadeIn 1s ease-out forwards;
+    }
+
+    /* Các class delay để hiệu ứng xuất hiện lần lượt */
+    .delay-100 {
+        animation-delay: 100ms;
+    }
+
+    .delay-200 {
+        animation-delay: 200ms;
+    }
+
+    .delay-300 {
+        animation-delay: 300ms;
+    }
+
+    .delay-400 {
+        animation-delay: 400ms;
+    }
+
+    .delay-500 {
+        animation-delay: 500ms;
+    }
+
+    .delay-600 {
+        animation-delay: 600ms;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
     }
 }

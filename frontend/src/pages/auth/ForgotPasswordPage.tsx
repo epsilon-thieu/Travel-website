@@ -1,9 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react'; // Bổ sung useState
 import { Link, useNavigate } from 'react-router-dom';
 import { ChevronLeft, KeyRound } from 'lucide-react';
 
 export const ForgotPasswordPage: React.FC = () => {
+    // Tạo state cho email
+    const [email, setEmail] = useState('');
+
     const navigate = useNavigate();
+
+    // Method xử lý submit form quên mật khẩu
+    const handleForgotPassword = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        // TODO: Thực hiện gọi API quên mật khẩu ở đây
+        /* 
+        try {
+            const response = await api.forgotPassword({ email });
+            console.log('Request sent success:', response);
+            // Hiển thị thông báo thành công cho người dùng (ví dụ: Toast message)
+        } catch (error) {
+            console.error('Request failed:', error);
+            // Hiển thị lỗi cho người dùng
+        }
+        */
+
+        // Log tạm thời để debug
+        console.log("Email khôi phục mật khẩu gửi đi:", { email });
+    };
 
     return (
         <>
@@ -20,10 +43,18 @@ export const ForgotPasswordPage: React.FC = () => {
                     <h2 className="text-2xl font-extrabold text-white mb-2">Forgot Password?</h2>
                     <p className="text-gray-400 text-xs mb-6">Enter your email to receive password reset instructions.</p>
 
-                    <form className="text-left space-y-4" onSubmit={(e) => e.preventDefault()}>
+                    {/* Đưa hàm handleForgotPassword vào onSubmit */}
+                    <form className="text-left space-y-4" onSubmit={handleForgotPassword}>
                         <div>
                             <label className="auth-input-label">Registered Email</label>
-                            <input type="email" placeholder="example@gmail.com" className="auth-input-field" required />
+                            <input
+                                type="email"
+                                placeholder="example@gmail.com"
+                                className="auth-input-field"
+                                required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
                         </div>
 
                         <button type="submit" className="auth-primary-btn">
