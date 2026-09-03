@@ -7,8 +7,10 @@ import { LoginPage } from '../pages/auth/LoginPage';
 import { RegisterPage } from '../pages/auth/RegisterPage';
 import { ForgotPasswordPage } from '../pages/auth/ForgotPasswordPage'; // Thêm dòng này
 import { HomePage } from '../pages/user/HomePage';
+import { ToursPage } from '../pages/user/SearchPages/ToursPage';
+import { FlightsPage } from '../pages/user/SearchPages/FlightsPage';
+import { HotelsPage } from '../pages/user/SearchPages/HotelsPage';
 
-const SearchPage: React.FC = () => <div className="p-4">Tìm kiếm</div>;
 
 export const router = createBrowserRouter([
     {
@@ -16,7 +18,9 @@ export const router = createBrowserRouter([
         element: <UserLayout />,
         children: [
             { index: true, element: <HomePage /> },
-            { path: 'search', element: <SearchPage /> },
+            { path: 'tours', element: <ToursPage /> },       // Thêm route Tours
+            { path: 'flights', element: <FlightsPage /> },   // Thêm route Flights
+            { path: 'hotels', element: <HotelsPage /> },
         ],
     },
     {

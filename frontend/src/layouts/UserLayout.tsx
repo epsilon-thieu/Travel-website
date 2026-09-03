@@ -18,9 +18,9 @@ export const UserLayout: React.FC = () => {
                     </Link>
 
                     <nav className="nav-links">
-                        <span onClick={() => navigate('/search')} className="nav-link-item">Search</span>
-                        <span className="nav-link-item">Tours</span>
-                        <span className="nav-link-item">Experiences</span>
+                        <Link to="/flights" className="nav-link-item">Destinations</Link>
+                        <Link to="/tours" className="nav-link-item">Tours</Link>
+                        <Link to="/hotels" className="nav-link-item">Hotels</Link>
                         <span className="nav-link-item">About Us</span>
                     </nav>
 
@@ -35,7 +35,6 @@ export const UserLayout: React.FC = () => {
                 </header>
 
                 <div className="content-wrapper">
-                    {/* Nội dung động (Khu vực cuộn được) */}
                     <main className="flex-1 overflow-y-auto pr-4 pb-10 scrollbar-hide">
                         <Outlet />
                     </main>
