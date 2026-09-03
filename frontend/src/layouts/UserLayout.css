@@ -9,8 +9,10 @@
     }
 
     .hero-bg-overlay {
-        @apply absolute inset-0 bg-cover bg-center opacity-40 mix-blend-luminosity scale-105 transition-transform duration-1000;
-        background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1920&auto=format&fit=crop');
+        /* Đã xóa mix-blend-luminosity và tăng opacity-40 lên opacity-80 */
+        @apply absolute inset-0 bg-cover bg-center opacity-80 scale-105 transition-transform duration-1000;
+
+        background-image: url('https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?q=80&w=1920&auto=format&fit=crop');
         animation: slowZoom 30s ease-in-out infinite alternate;
     }
 
