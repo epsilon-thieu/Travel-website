@@ -10,6 +10,7 @@ import { HomePage } from '../pages/user/HomePage';
 import { ToursPage } from '../pages/user/SearchPages/ToursPage';
 import { FlightsPage } from '../pages/user/SearchPages/FlightsPage';
 import { HotelsPage } from '../pages/user/SearchPages/HotelsPage';
+import { AboutUsPage } from '../pages/user/SearchPages/AboutUsPage';
 
 
 export const router = createBrowserRouter([
@@ -21,6 +22,7 @@ export const router = createBrowserRouter([
             { path: 'tours', element: <ToursPage /> },       // Thêm route Tours
             { path: 'flights', element: <FlightsPage /> },   // Thêm route Flights
             { path: 'hotels', element: <HotelsPage /> },
+            { path: 'about', element: <AboutUsPage /> },
         ],
     },
     {
