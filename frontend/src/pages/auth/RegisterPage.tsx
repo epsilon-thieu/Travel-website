@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, ChevronLeft, CheckCircle2 } from 'lucide-react';
+import { Eye, EyeOff, ChevronLeft} from 'lucide-react';
 
 export const RegisterPage: React.FC = () => {
     // Tạo state cho các trường nhập liệu
@@ -16,21 +16,40 @@ export const RegisterPage: React.FC = () => {
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // TODO: Thực hiện gọi API register ở đây
-        /* 
         try {
-            const response = await api.register({ firstName, lastName, email, password });
-            console.log('Register success:', response);
-            // Xử lý sau khi đăng ký thành công (chuyển hướng sang trang login hoặc tự động login)
-            navigate('/login');
-        } catch (error) {
-            console.error('Register failed:', error);
-            // Hiển thị lỗi cho người dùng
-        }
-        */
+            // Ghép first name và last name lại
+            const fullName = `${firstName} ${lastName}`.trim();
 
-        // Log tạm thời để debug
-        console.log("Dữ liệu đăng ký chuẩn bị gửi đi:", { firstName, lastName, email, password });
+            // Gọi API đến Endpoint đăng ký của Backend
+            const response = await fetch('http://localhost:5000/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                // Đóng gói dữ liệu gửi đi (khớp với schema.prisma)
+                body: JSON.stringify({ 
+                    name: fullName, 
+                    email: email, 
+                    password: password 
+                }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                console.log('Đăng ký thành công:', data);
+                alert('Tạo tài khoản thành công! Vui lòng đăng nhập để bắt đầu.');
+                
+                // Chuyển hướng người dùng sang trang Login
+                navigate('/login');
+            } else {
+                // Hiển thị lỗi từ Backend (ví dụ: Email đã tồn tại)
+                alert(data.message || 'Đăng ký thất bại!');
+            }
+        } catch (error) {
+            console.error('Lỗi khi gọi API Đăng ký:', error);
+            alert('Không thể kết nối đến Server. Vui lòng thử lại sau!');
+        }
     };
 
     return (

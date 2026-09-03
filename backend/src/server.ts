@@ -1,18 +1,18 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
-import mongoose from 'mongoose';
+import { PrismaClient } from '@prisma/client';
 
-// Import routes (nhớ đảm bảo các file này cũng đang dùng export default)
 import userRoutes from './routes/userRoutes';
 import authRoutes from './routes/authRoutes';
 
 const app = express();
+const prisma = new PrismaClient();
 
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect('mongodb://127.0.0.1:27017/ten_database_cua_ban')
-  .then(() => console.log('✅ Đã kết nối Database MongoDB thành công!'))
+prisma.$connect()
+  .then(() => console.log('✅ Đã kết nối Database PostgreSQL thành công!'))
   .catch((err: Error) => console.error('❌ Lỗi kết nối Database:', err));
 
 app.use('/api/users', userRoutes);

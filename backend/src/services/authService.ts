@@ -2,15 +2,12 @@ import { PrismaClient } from '@prisma/client';
 import { OAuth2Client } from 'google-auth-library';
 import jwt from 'jsonwebtoken';
 
-// Khởi tạo Prisma Client để giao tiếp với PostgreSQL
-// (Trong dự án thực tế, người ta thường khởi tạo cái này ở 1 file riêng rồi import vào để tránh tạo nhiều connection)
 const prisma = new PrismaClient(); 
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID as string);
 
 const generateSystemToken = (user: any) => {
   return jwt.sign(
-    // Lưu ý: PostgreSQL dùng 'id' thay vì '_id'
     { id: user.id, role: user.role }, 
     process.env.JWT_SECRET as string,
     { expiresIn: '7d' }
@@ -31,13 +28,11 @@ const loginWithGoogle = async (googleToken: string) => {
 
   const { email, name, sub: googleId } = payload;
 
-  // 1. TÌM KIẾM: Dùng Prisma findUnique thay vì Mongoose findOne
   let user = await prisma.user.findUnique({ 
     where: { email: email } 
   });
 
   if (!user) {
-    // 2. TẠO MỚI: Cú pháp create của Prisma
     user = await prisma.user.create({ 
       data: { 
         fullName: name || 'Người dùng Google', 
@@ -46,7 +41,6 @@ const loginWithGoogle = async (googleToken: string) => {
       } 
     });
   } else if (!user.googleId) {
-    // 3. CẬP NHẬT: Thay vì dùng user.save() như Mongoose, Prisma bắt buộc gọi update
     user = await prisma.user.update({
       where: { email: email },
       data: { googleId: googleId }
@@ -58,7 +52,6 @@ const loginWithGoogle = async (googleToken: string) => {
 };
 
 const loginWithFacebook = async (facebookToken: string) => {
-  // Logic xử lý Facebook...
 };
 
 export default { 

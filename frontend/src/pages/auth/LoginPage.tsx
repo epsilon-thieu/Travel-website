@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, ChevronLeft } from 'lucide-react';
+import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 
 export const LoginPage: React.FC = () => {
     // 1. Tạo state cho các trường nhập liệu
@@ -11,28 +12,64 @@ export const LoginPage: React.FC = () => {
     const navigate = useNavigate();
 
     // 2. Tạo method xử lý submit form
+    const handleGoogleSuccess = async (credentialResponse: any) => {
+        try {
+            // Lấy cái vé (ID Token) mà Google vừa cấp
+            const googleToken = credentialResponse.credential;
+
+            // Gửi cái vé đó xuống Backend của bạn để đối chiếu
+            const response = await fetch('http://localhost:5000/api/auth/google', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: googleToken }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                console.log('Đăng nhập Google thành công:', data);
+                localStorage.setItem('token', data.accessToken);
+                navigate('/dashboard');
+            } else {
+                alert(data.message || 'Xác thực Google tại Server thất bại!');
+            }
+        } catch (error) {
+            console.error('Lỗi khi gọi API Google:', error);
+            alert('Không thể kết nối đến Server.');
+        }
+    };
+
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // TODO: Thực hiện gọi API login ở đây
-        /* 
         try {
-            const response = await api.login({ email, password });
-            console.log('Login success:', response);
-            // Xử lý sau khi login thành công (lưu token, chuyển hướng...)
-            navigate('/dashboard');
-        } catch (error) {
-            console.error('Login failed:', error);
-            // Hiển thị lỗi cho người dùng
-        }
-        */
+        const response = await fetch('http://localhost:5000/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password }),
+        });
 
-        // Log tạm thời để bạn dễ debug
-        console.log("Dữ liệu chuẩn bị gửi đi:", { email, password });
+        const data = await response.json();
+
+        if (response.ok) {
+            console.log('Đăng nhập thành công:', data);
+            
+            localStorage.setItem('token', data.accessToken);
+            
+            navigate('/dashboard'); 
+        } else {
+            alert(data.message || 'Đăng nhập thất bại!');
+        }
+    } catch (error) {
+        console.error('Lỗi khi gọi API:', error);
+        alert('Không thể kết nối đến Server. Vui lòng thử lại sau!');
+    }
     };
 
     return (
-        <>
+        <GoogleOAuthProvider clientId="635401137109-tuv02b6hjesasevi1dbgfq89fi7eqpvo.apps.googleusercontent.com">
             <div className="auth-form-side anim-left">
                 <button onClick={() => navigate('/')} className="auth-back-btn">
                     <ChevronLeft className="w-5 h-5" />
@@ -43,9 +80,19 @@ export const LoginPage: React.FC = () => {
                     <p className="text-gray-400 text-xs mb-6">Life is for adventure, let's travel!</p>
 
                     <div className="flex justify-center gap-4 mb-6">
-                        <button className="auth-social-btn hover:text-emerald-400">
-                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#34A853" /><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#4285F4" /></svg>
-                        </button>
+                        {/* 4. Thay thế nút SVG Google tĩnh bằng Component chính thức của Google */}
+                        <div className="overflow-hidden rounded-full">
+                            <GoogleLogin
+                                onSuccess={handleGoogleSuccess}
+                                onError={() => {
+                                    console.log('Đăng nhập Google thất bại (từ phía Client)');
+                                }}
+                                type="icon"
+                                shape="circle"
+                            />
+                        </div>
+                        
+                        {/* Nút Facebook tĩnh giữ nguyên (để làm sau) */}
                         <button className="auth-social-btn hover:text-emerald-400">
                             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.09 2.31-.83 3.63-.73 1.5.15 2.67.75 3.4 1.83-3.13 1.88-2.6 5.96.48 7.21-.73 1.81-1.74 3.46-2.59 3.86zm-3.41-13.8c-.28-2.12 1.6-4.06 3.67-4.48.37 2.28-1.76 4.31-3.67 4.48z" /></svg>
                         </button>
@@ -119,6 +166,6 @@ export const LoginPage: React.FC = () => {
                     </div>
                 </div>
             </div>
-        </>
+        </GoogleOAuthProvider>
     );
 };
