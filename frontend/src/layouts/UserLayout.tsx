@@ -21,7 +21,7 @@ export const UserLayout: React.FC = () => {
                         <Link to="/flights" className="nav-link-item">Destinations</Link>
                         <Link to="/tours" className="nav-link-item">Tours</Link>
                         <Link to="/hotels" className="nav-link-item">Hotels</Link>
-                        <span className="nav-link-item">About Us</span>
+                        <Link to="/about" className="nav-link-item">About Us</Link>
                     </nav>
 
                     <div className="auth-nav-buttons">
