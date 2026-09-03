@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsx watch src/server.ts",
     "postinstall": "prisma skills sync || exit 0"
   },
   "keywords": [],
@@ -16,11 +17,16 @@
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^26.4.1",
-    "prisma": "^6.0.0"
+    "prisma": "^6.0.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.0.0"
   },
   "dependencies": {
     "@prisma/client": "^6.0.0",
     "axios": "^1.20.0",
-    "google-auth-library": "^11.0.2"
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "google-auth-library": "^11.0.2",
+    "jsonwebtoken": "^9.0.2"
   }
 }
