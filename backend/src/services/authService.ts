@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { OAuth2Client } from 'google-auth-library';
 import jwt from 'jsonwebtoken';
+import axios from 'axios';
 
 const prisma = new PrismaClient(); 
 
@@ -51,10 +52,51 @@ const loginWithGoogle = async (googleToken: string) => {
   return { user, token: systemToken };
 };
 
-const loginWithFacebook = async (facebookToken: string) => {
-};
 
+/*
+const loginWithFacebook = async (fbAccessToken: string) => {
+  // 1. XÁC THỰC: Gọi Facebook Graph API để lấy thông tin user
+  const { data } = await axios.get(
+    process.env.FACEBOOK_GRAPH_API_URL as string, {
+    params: {
+      fields: 'id,name,email',
+      access_token: fbAccessToken
+    }
+  });
+
+  if (!data || !data.email) {
+    throw new Error("Không thể lấy email từ tài khoản Facebook này");
+  }
+
+  const { email, name, id: facebookId } = data;
+
+  // 2. TÌM KIẾM: Dùng Prisma findUnique thay vì Mongoose findOne
+  let user = await prisma.user.findUnique({
+    where: { email: email }
+  });
+
+  if (!user) {
+    // 3. TẠO MỚI: Cú pháp create của Prisma
+    user = await prisma.user.create({
+      data: {
+        fullName: name || 'Người dùng Facebook',
+        email: email,
+        facebookId: facebookId
+      }
+    });
+  } else if (!user.facebookId) {
+    // 4. CẬP NHẬT: Thay vì dùng user.save() như Mongoose, Prisma bắt buộc gọi update
+    user = await prisma.user.update({
+      where: { email: email },
+      data: { facebookId: facebookId }
+    });
+  }
+
+  const systemToken = generateSystemToken(user);
+  return { user, token: systemToken };
+};
+*/
 export default { 
   loginWithGoogle, 
-  loginWithFacebook 
+  //loginWithFacebook 
 };
