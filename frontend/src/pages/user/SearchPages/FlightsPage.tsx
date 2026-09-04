@@ -1,106 +1,106 @@
 import React, { useState, useEffect } from 'react';
-import { Search, PlaneTakeoff, PlaneLanding, Calendar, Users } from 'lucide-react';
+import { PlaneTakeoff, PlaneLanding, Calendar, Users, ArrowRight } from 'lucide-react';
 import DatePicker from '../../../components/common/DatePicker';
-import './SearchPages.css';
+import { styles } from './SharePagesStyle';
 
 export const FlightsPage: React.FC = () => {
-    // 1. STATES FORM SEARCH
     const [departure, setDeparture] = useState('');
     const [arrival, setArrival] = useState('');
     const [date, setDate] = useState<Date | null>(null);
     const [passengers, setPassengers] = useState('1');
-
-    // 2. STATES API
     const [flights, setFlights] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(() => {
-        // fetchFlights();
-    }, []);
+    useEffect(() => { }, []);
 
-    // 3. HÀM TÌM KIẾM
     const handleSearch = () => {
         console.log("Searching Flights:", { departure, arrival, date, passengers });
         setIsLoading(true);
-        // TODO: Call API Flights
     };
 
     return (
-        <div className="w-full animate-fade-up">
-            <div className="search-page-header">
-                <h1 className="search-page-title">Book Flights</h1>
-                <p className="search-page-subtitle">Compare prices and find the best flights for your journey.</p>
+        <div className="min-h-screen bg-white text-black font-sans selection:bg-black selection:text-white pb-24">
+
+            <div className="px-6 md:px-12 lg:px-24 pt-20 mb-16">
+                <div className={styles.heroSection}>
+                    <img
+                        src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=2000&q=80"
+                        alt="Flight journey"
+                        className={styles.heroImage}
+                    />
+                    <div className={styles.heroOverlay}></div>
+                    <div className={styles.heroContent}>
+                        <span className={`${styles.labelOverlineLight} mb-6`}>02 / Transport</span>
+                        <h1 className={`${styles.headingHeroLight} mb-6`}>BOOK<br />FLIGHTS.</h1>
+                        <p className={styles.textBodyHeroLight}>
+                            Compare prices and find the best routes for your journey. We don't just book tickets; we connect you with the heartbeat of the sky.
+                        </p>
+                    </div>
+                </div>
             </div>
 
-            {/* Filter Bar */}
-            <div className="filter-glass-bar">
-                <div className="filter-input-group">
-                    <label className="filter-label">From</label>
-                    <div className="filter-input-wrapper">
-                        <PlaneTakeoff className="w-4 h-4 text-emerald-400" />
-                        <input
-                            type="text"
-                            placeholder="Departure city"
-                            className="filter-input"
-                            value={departure}
-                            onChange={(e) => setDeparture(e.target.value)}
-                        />
+            <div className="w-full border-t-2 border-black mb-16"></div>
+
+            <div className="px-6 md:px-12 lg:px-24 mb-24">
+                <div className={styles.filterContainer}>
+                    <div className={styles.filterBox}>
+                        <label className={`${styles.labelOverline} mb-3`}>Origin</label>
+                        <div className="flex items-center gap-3">
+                            <PlaneTakeoff className="w-5 h-5 text-black shrink-0" strokeWidth={2} />
+                            <input type="text" placeholder="Departure city" className={styles.filterInput} value={departure} onChange={(e) => setDeparture(e.target.value)} />
+                        </div>
                     </div>
-                </div>
-                <div className="filter-input-group">
-                    <label className="filter-label">To</label>
-                    <div className="filter-input-wrapper">
-                        <PlaneLanding className="w-4 h-4 text-emerald-400" />
-                        <input
-                            type="text"
-                            placeholder="Arrival city"
-                            className="filter-input"
-                            value={arrival}
-                            onChange={(e) => setArrival(e.target.value)}
-                        />
+
+                    <div className={styles.filterBox}>
+                        <label className={`${styles.labelOverline} mb-3`}>Destination</label>
+                        <div className="flex items-center gap-3">
+                            <PlaneLanding className="w-5 h-5 text-black shrink-0" strokeWidth={2} />
+                            <input type="text" placeholder="Arrival city" className={styles.filterInput} value={arrival} onChange={(e) => setArrival(e.target.value)} />
+                        </div>
                     </div>
-                </div>
-                <div className="filter-input-group">
-                    <label className="filter-label">Date</label>
-                    <div className="filter-input-wrapper">
-                        <Calendar className="w-4 h-4 text-emerald-400" />
-                        <DatePicker
-                            value={date}
-                            onChange={(date: Date | null) => setDate(date)}
-                        />
+
+                    <div className={`${styles.filterBox} z-10`}>
+                        <label className={`${styles.labelOverline} mb-3`}>Date</label>
+                        <div className="flex items-center gap-3">
+                            <Calendar className="w-5 h-5 text-black shrink-0" strokeWidth={2} />
+                            <DatePicker value={date} onChange={(date: Date | null) => setDate(date)} />
+                        </div>
                     </div>
-                </div>
-                <div className="filter-input-group">
-                    <label className="filter-label">Passengers</label>
-                    <div className="filter-input-wrapper">
-                        <Users className="w-4 h-4 text-emerald-400" />
-                        <input
-                            type="number"
-                            min="1"
-                            placeholder="1 Adult"
-                            className="filter-input"
-                            value={passengers}
-                            onChange={(e) => setPassengers(e.target.value)}
-                        />
+
+                    <div className={styles.filterBox}>
+                        <label className={`${styles.labelOverline} mb-3`}>Passengers</label>
+                        <div className="flex items-center gap-3">
+                            <Users className="w-5 h-5 text-black shrink-0" strokeWidth={2} />
+                            <input type="number" min="1" placeholder="1 Adult" className={styles.filterInput} value={passengers} onChange={(e) => setPassengers(e.target.value)} />
+                        </div>
                     </div>
+
+                    <button onClick={handleSearch} disabled={isLoading} className={styles.btnPrimary}>
+                        <span className="font-black text-lg uppercase tracking-widest">
+                            {isLoading ? 'Wait' : 'Search'}
+                        </span>
+                        <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" strokeWidth={2.5} />
+                    </button>
                 </div>
-                <button onClick={handleSearch} className="btn-search">
-                    <Search className="w-4 h-4" /> Search
-                </button>
             </div>
 
-            {/* Results Section */}
-            <div className="api-results-header animate-fade-up delay-100">
-                <h2 className="text-xl font-bold text-white">Available Flights</h2>
-            </div>
+            <div className="px-6 md:px-12 lg:px-24">
+                <div className="text-center mb-16">
+                    <span className={`${styles.labelOverline} mb-4`}>03 / Results</span>
+                    <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tight">Available Routes</h2>
+                </div>
 
-            <div className="api-results-grid !grid-cols-1 md:!grid-cols-2 animate-fade-up delay-200">
-                {[1, 2, 3, 4].map((item) => (
-                    <div key={item} className="api-placeholder-card !h-[150px]">
-                        <PlaneTakeoff className="w-8 h-8 mb-3 opacity-50 text-emerald-400" />
-                        <p className="text-sm font-medium">Flight API Ticket {item}</p>
-                    </div>
-                ))}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-fade-up">
+                    {[1, 2, 3, 4].map((item) => (
+                        <div key={item} className={styles.resultCard}>
+                            <PlaneTakeoff className="w-12 h-12 text-black mb-6 group-hover:text-white transition-colors" strokeWidth={1.5} />
+                            <h3 className="text-2xl font-black uppercase tracking-tight mb-2">Ticket Data {item}</h3>
+                            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 group-hover:text-gray-300 transition-colors">
+                                Flight API Placeholder
+                            </span>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );
