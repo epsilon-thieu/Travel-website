@@ -53,11 +53,10 @@ const loginWithGoogle = async (googleToken: string) => {
 };
 
 
-/*
 const loginWithFacebook = async (fbAccessToken: string) => {
   // 1. XÁC THỰC: Gọi Facebook Graph API để lấy thông tin user
   const { data } = await axios.get(
-    process.env.FACEBOOK_GRAPH_API_URL as string, {
+    process.env.FACEBOOK_ID as string, {
     params: {
       fields: 'id,name,email',
       access_token: fbAccessToken
@@ -94,8 +93,8 @@ const loginWithFacebook = async (fbAccessToken: string) => {
 
   const systemToken = generateSystemToken(user);
   return { user, token: systemToken };
-};
-*/
+}; 
+
 export default { 
   loginWithGoogle, 
   //loginWithFacebook 
