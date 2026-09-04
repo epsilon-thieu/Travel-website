@@ -28,8 +28,31 @@ const googleLogin = async (req: Request, res: Response) => {
   }
 };
 
+const facebookLogin = async (req: Request, res: Response) => {
+  try {
+    const { token } = req.body;
+
+    if (!token) {
+      return res.status(400).json({ message: 'Thiếu token Facebook' });
+    }
+
+    const result = await authService.loginWithFacebook(token);
+
+    res.status(200).json({
+      message: 'Đăng nhập Facebook thành công',
+      user: result.user,
+      accessToken: result.token
+    });
+  } catch (error: any) {
+    res.status(401).json({
+      message: 'Xác thực Facebook thất bại',
+      error: error.message
+    });
+  }
+};
 export default {
   login,
   register,
-  googleLogin
+  googleLogin,
+  facebookLogin
 };
