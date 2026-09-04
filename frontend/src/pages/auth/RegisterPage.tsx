@@ -17,8 +17,40 @@ export const RegisterPage: React.FC = () => {
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // TODO: Gọi API register
-        console.log("Dữ liệu đăng ký gửi đi:", { firstName, lastName, email, password });
+        try {
+            // Ghép first name và last name lại
+            const fullName = `${firstName} ${lastName}`.trim();
+
+            // Gọi API đến Endpoint đăng ký của Backend
+            const response = await fetch('http://localhost:5000/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                // Đóng gói dữ liệu gửi đi (khớp với schema.prisma)
+                body: JSON.stringify({
+                    name: fullName,
+                    email: email,
+                    password: password
+                }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                console.log('Đăng ký thành công:', data);
+                alert('Tạo tài khoản thành công! Vui lòng đăng nhập để bắt đầu.');
+
+                // Chuyển hướng người dùng sang trang Login
+                navigate('/login');
+            } else {
+                // Hiển thị lỗi từ Backend (ví dụ: Email đã tồn tại)
+                alert(data.message || 'Đăng ký thất bại!');
+            }
+        } catch (error) {
+            console.error('Lỗi khi gọi API Đăng ký:', error);
+            alert('Không thể kết nối đến Server. Vui lòng thử lại sau!');
+        }
     };
 
     return (
