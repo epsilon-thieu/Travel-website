@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, ChevronLeft} from 'lucide-react';
+import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import './AuthForm.css';
 
 export const RegisterPage: React.FC = () => {
-    // Tạo state cho các trường nhập liệu
+    // Tạo state
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -12,7 +13,7 @@ export const RegisterPage: React.FC = () => {
 
     const navigate = useNavigate();
 
-    // Method xử lý submit form đăng ký
+    // Xử lý submit
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -27,10 +28,10 @@ export const RegisterPage: React.FC = () => {
                     'Content-Type': 'application/json',
                 },
                 // Đóng gói dữ liệu gửi đi (khớp với schema.prisma)
-                body: JSON.stringify({ 
-                    name: fullName, 
-                    email: email, 
-                    password: password 
+                body: JSON.stringify({
+                    name: fullName,
+                    email: email,
+                    password: password
                 }),
             });
 
@@ -39,7 +40,7 @@ export const RegisterPage: React.FC = () => {
             if (response.ok) {
                 console.log('Đăng ký thành công:', data);
                 alert('Tạo tài khoản thành công! Vui lòng đăng nhập để bắt đầu.');
-                
+
                 // Chuyển hướng người dùng sang trang Login
                 navigate('/login');
             } else {
@@ -53,37 +54,32 @@ export const RegisterPage: React.FC = () => {
     };
 
     return (
-        <>
-            <div className="auth-img-side anim-left">
-                <div className="auth-img-inner">
-                    <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=1000&auto=format&fit=crop" alt="Scenery" className="auth-img" />
-                    <div className="auth-img-overlay"></div>
-
-                    <div className="absolute bottom-8 left-6 right-6 text-white">
-                        <h3 className="text-3xl font-bold mb-2">Your Adventure <br />Starts <span className="italic text-emerald-400 font-serif">Here</span></h3>
-                        <p className="text-xs text-gray-300">Discover thousands of breathtaking destinations around the world.</p>
-                    </div>
+        <div className="auth-container">
+            {/* Ảnh bên trái */}
+            <div className="auth-img-side">
+                <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=1000&auto=format&fit=crop" alt="Scenery" className="auth-img" />
+                <div className="absolute bottom-12 left-12 text-white">
+                    <span className="text-xs font-bold uppercase tracking-[0.3em] mb-4 block drop-shadow-md">Inspiration</span>
+                    <h3 className="text-5xl font-black uppercase leading-none mb-4 italic font-serif drop-shadow-lg">Lets begin your <br />dream.</h3>
                 </div>
             </div>
 
-            <div className="auth-form-side anim-right">
+            <div className="auth-form-side">
                 <button onClick={() => navigate('/')} className="auth-back-btn">
-                    <ChevronLeft className="w-5 h-5" />
+                    <ArrowLeft className="w-4 h-4" /> Back to Home
                 </button>
 
-                <div className="auth-toggle-pill">
-                    <button className="toggle-btn-active">Register</button>
-                    <Link to="/login" className="toggle-btn-inactive">Login</Link>
-                </div>
-
                 <div className="max-w-sm w-full mx-auto">
-                    <h2 className="text-3xl font-extrabold text-white mb-1">Create Account</h2>
-                    <p className="text-gray-400 text-xs mb-6">Start Your Journey for Travelling Here!</p>
+                    <div className="auth-toggle-nav">
+                        <Link to="/login" className="toggle-link">Sign In</Link>
+                        <button className="toggle-link toggle-link-active">Register</button>
+                    </div>
 
-                    {/* Đưa hàm handleRegister vào onSubmit */}
-                    <form className="space-y-4" onSubmit={handleRegister}>
-                        <div className="flex gap-3">
-                            <div className="flex-1">
+                    <h2 className="text-4xl font-black uppercase tracking-tighter mb-10">Create Account</h2>
+
+                    <form className="space-y-6" onSubmit={handleRegister}>
+                        <div className="flex gap-4">
+                            <div className="auth-input-group flex-1">
                                 <label className="auth-input-label">First Name</label>
                                 <input
                                     type="text"
@@ -94,7 +90,7 @@ export const RegisterPage: React.FC = () => {
                                     onChange={(e) => setFirstName(e.target.value)}
                                 />
                             </div>
-                            <div className="flex-1">
+                            <div className="auth-input-group flex-1">
                                 <label className="auth-input-label">Last Name</label>
                                 <input
                                     type="text"
@@ -107,11 +103,11 @@ export const RegisterPage: React.FC = () => {
                             </div>
                         </div>
 
-                        <div>
-                            <label className="auth-input-label">Email</label>
+                        <div className="auth-input-group">
+                            <label className="auth-input-label">Email Address</label>
                             <input
                                 type="email"
-                                placeholder="example@gmail.com"
+                                placeholder="name@example.com"
                                 className="auth-input-field"
                                 required
                                 value={email}
@@ -119,31 +115,27 @@ export const RegisterPage: React.FC = () => {
                             />
                         </div>
 
-                        <div>
+                        <div className="auth-input-group">
                             <label className="auth-input-label">Password</label>
-                            <div className="relative flex items-center">
+                            <div className="relative">
                                 <input
                                     type={showPassword ? 'text' : 'password'}
-                                    placeholder="••••••••••••"
-                                    className="auth-input-field pr-20"
+                                    placeholder="Min. 8 characters"
+                                    className="auth-input-field pr-10"
                                     required
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
-                                <div className="absolute right-3 flex items-center gap-1">
-                                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="text-emerald-400 hover:text-emerald-300">
-                                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                                    </button>
-                                </div>
+                                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-0 top-3 text-gray-400">
+                                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                </button>
                             </div>
                         </div>
 
-                        <button type="submit" className="auth-primary-btn mt-2">
-                            Start Your Journey
-                        </button>
+                        <button type="submit" className="auth-primary-btn mt-6">Join Natura Travel</button>
                     </form>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
