@@ -111,7 +111,8 @@ const googleLogin = async (req: Request, res: Response) => {
       user: result.user,
       accessToken: result.token
     });
-  } catch (error: any) { 
+  } catch (error: any) {
+    console.log("CHI TIẾT LỖI SERVICE:", error); 
     res.status(401).json({ 
       message: 'Xác thực Google thất bại', 
       error: error.message 
@@ -135,6 +136,8 @@ const facebookLogin = async (req: Request, res: Response) => {
       accessToken: result.token
     });
   } catch (error: any) {
+        console.log("CHI TIẾT LỖI SERVICE:", error); 
+
     res.status(401).json({
       message: 'Xác thực Facebook thất bại',
       error: error.message

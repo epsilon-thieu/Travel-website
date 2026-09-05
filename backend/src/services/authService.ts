@@ -15,19 +15,19 @@ const generateSystemToken = (user: any) => {
   );
 };
 
-const loginWithGoogle = async (googleToken: string) => {
-  const ticket = await googleClient.verifyIdToken({
-    idToken: googleToken,
-    audience: process.env.GOOGLE_CLIENT_ID,
+const loginWithGoogle = async (accessToken: string) => {
+  const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
   });
-  
-  const payload = ticket.getPayload();
-  
-  if (!payload || !payload.email) {
-    throw new Error("Không thể lấy email từ tài khoản Google này");
-  }
 
-  const { email, name, sub: googleId } = payload;
+  if (!response.ok) {
+    throw new Error('Token Google không hợp lệ hoặc đã hết hạn');
+  }
+  
+  const userInfo = await response.json();
+  const { email, name, sub: googleId } = userInfo;
 
   let user = await prisma.user.findUnique({ 
     where: { email: email } 
@@ -54,45 +54,36 @@ const loginWithGoogle = async (googleToken: string) => {
 
 
 const loginWithFacebook = async (fbAccessToken: string) => {
-  // 1. XÁC THỰC: Gọi Facebook Graph API để lấy thông tin user
-  const { data } = await axios.get(
-    process.env.FACEBOOK_ID as string, {
-    params: {
-      fields: 'id,name,email',
-      access_token: fbAccessToken
+    try {
+        const url = `https://graph.facebook.com/me?fields=id,name,email&access_token=${fbAccessToken}`;
+        
+        const response = await axios.get(url);
+        const { id: facebookId, email, name: full_name, picture } = response.data;
+        const avatar_url = picture?.data?.url;
+
+        // Kiểm tra xem user đã tồn tại trong Database (Prisma) chưa
+        let user = await prisma.user.findUnique({
+            where: { email: email }
+        });
+
+        if (!user) {
+            user = await prisma.user.create({
+                data: {
+                    email: email,
+                    fullName: full_name,
+                    facebookId: facebookId,
+                    role: 'user'
+                }
+            });
+        }
+
+        // Tạo Token hệ thống trả về cho Frontend
+        const token = generateSystemToken(user.id);
+        return { user, token };
+
+    } catch (error: any) {
+        throw new Error('Lỗi xác thực với Facebook: ' + error.message);
     }
-  });
-
-  if (!data || !data.email) {
-    throw new Error("Không thể lấy email từ tài khoản Facebook này");
-  }
-
-  const { email, name, id: facebookId } = data;
-
-  // 2. TÌM KIẾM: Dùng Prisma findUnique thay vì Mongoose findOne
-  let user = await prisma.user.findUnique({
-    where: { email: email }
-  });
-
-  if (!user) {
-    // 3. TẠO MỚI: Cú pháp create của Prisma
-    user = await prisma.user.create({
-      data: {
-        fullName: name || 'Người dùng Facebook',
-        email: email,
-        facebookId: facebookId
-      }
-    });
-  } else if (!user.facebookId) {
-    // 4. CẬP NHẬT: Thay vì dùng user.save() như Mongoose, Prisma bắt buộc gọi update
-    user = await prisma.user.update({
-      where: { email: email },
-      data: { facebookId: facebookId }
-    });
-  }
-
-  const systemToken = generateSystemToken(user);
-  return { user, token: systemToken };
 };
 
 export default { 
