@@ -23,7 +23,7 @@ app.get('/', (req: Request, res: Response) => {
   res.send('🎉 Chúc mừng! Server Backend của bạn đang hoạt động cực mượt!');
 });
 
-const PORT = 5000;
+const PORT = 5001;
 app.listen(PORT, () => {
   console.log(`🚀 Server đang chạy tại: http://localhost:${PORT}`);
 });
