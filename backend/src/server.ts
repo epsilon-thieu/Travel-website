@@ -23,7 +23,7 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Chúc mừng cậu chủ thắng lớn');
 });
 
-const PORT = 5000;
+const PORT = 3600;
 app.listen(PORT, () => {
   console.log(`Server đang rặn tại: http://localhost:${PORT}`);
 });
