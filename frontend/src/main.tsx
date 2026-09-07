@@ -8,7 +8,6 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    {/* 2. Bọc cái "ổ điện" này xung quanh thẻ <App /> */}
     <GoogleOAuthProvider clientId="635401137109-tuv02b6hjesasevi1dbgfq89fi7eqpvo.apps.googleusercontent.com">
       <App />
     </GoogleOAuthProvider>

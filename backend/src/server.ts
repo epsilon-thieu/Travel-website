@@ -20,10 +20,10 @@ app.use('/api/auth', authRoutes);
 
 // Thêm kiểu Request và Response vào đây để hết lỗi "any type"
 app.get('/', (req: Request, res: Response) => {
-  res.send('🎉 Chúc mừng! Server Backend của bạn đang hoạt động cực mượt!');
+  res.send('Chúc mừng cậu chủ thắng lớn');
 });
 
 const PORT = 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server đang chạy tại: http://localhost:${PORT}`);
+  console.log(`Server đang rặn tại: http://localhost:${PORT}`);
 });
