@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { OAuth2Client } from 'google-auth-library';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
+import nodemailer from 'nodemailer';
 
 const prisma = new PrismaClient(); 
 
@@ -86,7 +87,25 @@ const loginWithFacebook = async (fbAccessToken: string) => {
     }
 };
 
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.MY_GMAIL,
+        pass: process.env.GMAIL_APP_PASSWORD
+    }
+});
+
+const sendOtpEmail = async (toEmail: string, otpCode: string) => {
+    await transporter.sendMail({
+        from: '"Travel Website Support" <no-reply@travelweb.com>',
+        to: toEmail,
+        subject: 'Mã xác nhận khôi phục mật khẩu',
+        html: `<h3>Mã OTP của bạn là: <b style="color:red;">${otpCode}</b></h3><p>Mã này có hiệu lực trong vòng 5 phút.</p>`
+    });
+};
+
 export default { 
   loginWithGoogle, 
-  loginWithFacebook 
+  loginWithFacebook,
+  sendOtpEmail
 };

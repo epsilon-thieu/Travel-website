@@ -3,12 +3,22 @@ import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import authService from '../services/authService';
+import { getRandomValues } from 'crypto';
+import SendmailTransport from 'nodemailer/lib/sendmail-transport';
 
 const prisma = new PrismaClient();
 
 const generateToken = (userId: string, email: string) => {
   const secret = process.env.JWT_SECRET || 'default_secret_key';
   return jwt.sign({ userId, email }, secret, { expiresIn: '7d' });
+};
+
+export const generateOTP = (length: number = 6): string => {
+    let otp = '';
+    for (let i = 0; i < length; i++) {
+        otp += Math.floor(Math.random() * 10).toString();
+    }
+    return otp;
 };
 
 const login = async (req: Request, res: Response) => {
@@ -137,9 +147,81 @@ const facebookLogin = async (req: Request, res: Response) => {
     });
   }
 };
+
+const forgetPass = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: 'Email khong tim thay!' });
+    }
+
+    const otpCode = generateOTP(6);
+    const secret = process.env.JWT_SECRET || 'default_secret';
+    const tempToken = jwt.sign(
+      { email, otp: otpCode }, 
+        secret, 
+      { expiresIn: '5m' }
+    );
+
+    await authService.sendOtpEmail(email, otpCode);
+
+    return res.status(200).json({
+      message: 'Đã gửi otp đến mail của bạn!',
+      tempToken,
+    });
+  }
+  catch (error: any) {
+    console.log("CHI TIẾT LỖI SERVICE:", error);
+  }
+};
+
+const resetPass = async (req: Request, res: Response) => {
+  try {
+    const { email, otp, tempToken, newPassword } = req.body;
+
+    if (!tempToken) {
+      return res.status(400).json({ message: 'Thiếu mã xác thực tạm thời! Vui lòng thao tác lại từ đầu.' });
+    }
+
+    const secret = process.env.JWT_SECRET || 'default_secret';
+    let decoded: any;
+
+    try {
+      decoded = jwt.verify(tempToken, secret);
+    } catch (err) {
+      return res.status(400).json({ message: 'Mã OTP đã hết hạn hoặc không hợp lệ!' });
+    }
+
+    if (decoded.email !== email || decoded.otp !== otp) {
+      return res.status(400).json({ message: 'Mã OTP không chính xác!' });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await prisma.user.update({
+      where: { email },
+      data: { password: hashedPassword },
+    });
+    return res.status(200).json({ 
+      message: 'Đặt lại mật khẩu thành công! Bạn có thể đăng nhập bằng mật khẩu mới.' 
+    });
+  }
+
+  catch (error: any) {
+    console.log("CHI TIẾT LỖI SERVICE:", error);
+  }
+};
+
+
 export default {
   login,
   register,
   googleLogin,
-  facebookLogin
+  facebookLogin,
+  forgetPass
 };
