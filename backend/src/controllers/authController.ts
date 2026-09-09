@@ -217,11 +217,11 @@ const resetPass = async (req: Request, res: Response) => {
   }
 };
 
-
 export default {
   login,
   register,
   googleLogin,
   facebookLogin,
-  forgetPass
+  forgetPass,
+  resetPass
 };

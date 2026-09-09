@@ -4,7 +4,7 @@ import { AuthRequest } from '../middlewares/authMiddleware';
 
 const prisma = new PrismaClient();
 
-export const getProfile = async (req: AuthRequest, res: Response) => {
+const getProfile = async (req: AuthRequest, res: Response) => {
     try {
         const userId = req.user?.userId || req.user?.id;
 
@@ -37,4 +37,8 @@ export const getProfile = async (req: AuthRequest, res: Response) => {
         console.error('Lỗi lấy profile:', error);
         return res.status(500).json({ message: 'Lỗi server nội bộ', error: error.message });
     }
+};
+
+export {
+    getProfile
 };

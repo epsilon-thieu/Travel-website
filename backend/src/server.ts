@@ -4,6 +4,7 @@ import { PrismaClient } from '@prisma/client';
 
 import userRoutes from './routes/userRoutes';
 import authRoutes from './routes/authRoutes';
+import tourRoutes from './routes/tourRoutes';
 
 const app = express();
 const prisma = new PrismaClient();
@@ -17,6 +18,7 @@ prisma.$connect()
 
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/tours', tourRoutes);
 
 // Thêm kiểu Request và Response vào đây để hết lỗi "any type"
 app.get('/', (req: Request, res: Response) => {
