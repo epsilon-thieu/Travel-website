@@ -12,21 +12,19 @@ import { FlightsPage } from '../pages/user/SearchPages/FlightsPage';
 import { HotelsPage } from '../pages/user/SearchPages/HotelsPage';
 import { AboutUsPage } from '../pages/user/SearchPages/AboutUsPage';
 
-// 1. Tạo loader chặn người dùng đã đăng nhập vào trang Auth
+// Loader: Chặn người dùng ĐÃ CÓ token quay lại trang Login/Register
 const requireGuest = () => {
     const token = localStorage.getItem('token');
     if (token) {
-        // Đã có token thì đẩy thẳng về trang chủ (hoặc dashboard)
         return redirect('/');
     }
-    return null; // Cho phép tiếp tục render
+    return null;
 };
 
-// 2. (Tuỳ chọn) Tạo loader chặn người dùng chưa đăng nhập vào trang Admin/Bảo mật
+// Loader: Chặn người dùng CHƯA CÓ token vào khu vực Admin
 const requireAuth = () => {
     const token = localStorage.getItem('token');
     if (!token) {
-        // Chưa có token thì bắt quay lại trang login
         return redirect('/login');
     }
     return null;
@@ -47,7 +45,7 @@ export const router = createBrowserRouter([
     {
         path: '/',
         element: <AuthLayout />,
-        loader: requireGuest, // Thêm loader vào Layout cha của Auth
+        loader: requireGuest,
         children: [
             { path: 'login', element: <LoginPage /> },
             { path: 'register', element: <RegisterPage /> },
@@ -57,7 +55,7 @@ export const router = createBrowserRouter([
     {
         path: '/admin',
         element: <AdminLayout />,
-        loader: requireAuth, // Bảo vệ toàn bộ các trang Admin
+        loader: requireAuth,
         children: [
             { index: true, element: <div>Admin Dashboard</div> },
         ],
