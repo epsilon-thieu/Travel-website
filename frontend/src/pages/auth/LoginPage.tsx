@@ -32,7 +32,6 @@ export const LoginPage: React.FC = () => {
                 if (response.ok) {
                     console.log('Đăng nhập Google thành công:', data);
                     localStorage.setItem('token', data.accessToken);
-                    localStorage.setItem('userName', data.user.fullName);
                     navigate('/');
                 } else {
                     alert(data.message || 'Xác thực Google tại Server thất bại!');
