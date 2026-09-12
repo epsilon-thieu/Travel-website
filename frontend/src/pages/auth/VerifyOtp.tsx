@@ -7,46 +7,57 @@ const VerifyOtp: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Lấy email từ state truyền sang (để hiển thị cho user biết đang verify cho mail nào)
-    const email = location.state?.email || 'email của bạn';
+    // Lấy email từ state truyền sang từ trang Quên mật khẩu
+    const email = location.state?.email;
 
     const handleVerifyOtp = async (e: React.FormEvent) => {
         e.preventDefault();
-        setIsLoading(true);
 
-        // Lấy token đã lưu từ bước trước
+        // 1. Lấy tempToken đã lưu từ localStorage
         const tempToken = localStorage.getItem('tempToken');
 
-        if (!tempToken) {
-            alert('Phiên làm việc không hợp lệ. Vui lòng thực hiện lại từ đầu.');
+        // 2. Kiểm tra xem có đủ dữ liệu không
+        if (!tempToken || !email) {
+            alert('Phiên làm việc không hợp lệ hoặc thiếu email. Vui lòng thực hiện lại từ đầu.');
             navigate('/forgot-password');
             return;
         }
 
+        setIsLoading(true);
+
         try {
-            // Thay đổi URL theo API thực tế của bạn
+            // 3. Gọi API với email, otp và tempToken trong body
             const response = await fetch('http://localhost:3600/api/auth/verify-otp', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${tempToken}` // Gửi token lên nếu API yêu cầu
                 },
-                body: JSON.stringify({ otp }),
+                body: JSON.stringify({
+                    email,
+                    otp,
+                    tempToken
+                }),
             });
 
             const data = await response.json();
 
+            // 4. Xử lý kết quả trả về
             if (response.ok) {
                 alert('Xác thực OTP thành công!');
-                // Xóa token tạm nếu cần và chuyển hướng đến trang Đổi mật khẩu mới
+
+                // Tùy chọn: Xóa tempToken nếu bước tiếp theo (Đổi mật khẩu) không cần dùng đến nữa, 
+                // hoặc giữ lại và truyền sang trang đặt lại mật khẩu để API đổi mật khẩu biết bạn đã xác thực.
                 // localStorage.removeItem('tempToken'); 
-                navigate('/reset-password-final');
+
+                // Chuyển hướng sang trang đặt lại mật khẩu mới, truyền theo email và token (nếu cần)
+                navigate('/reset-password-final', { state: { email, tempToken } });
             } else {
-                alert(data.message || 'Mã OTP không chính xác!');
+                // Hiển thị thông báo lỗi từ backend (ví dụ: "Mã OTP đã hết hạn", "Mã OTP không chính xác")
+                alert(data.message || 'Xác thực thất bại!');
             }
         } catch (error) {
             console.error('Lỗi API:', error);
-            alert('Không thể kết nối đến Server.');
+            alert('Không thể kết nối đến Server. Vui lòng thử lại!');
         } finally {
             setIsLoading(false);
         }
@@ -77,7 +88,8 @@ const VerifyOtp: React.FC = () => {
                             VERIFY OTP
                         </h1>
                         <p className="text-gray-500 text-sm">
-                            Enter the verification code we just sent to <br /> <span className="font-medium text-gray-700">{email}</span>.
+                            Enter the verification code we just sent to <br />
+                            <span className="font-medium text-gray-700">{email || 'your email'}</span>.
                         </p>
                     </div>
 

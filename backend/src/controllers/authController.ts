@@ -12,11 +12,11 @@ const generateToken = (userId: string, email: string) => {
 };
 
 export const generateOTP = (length: number = 6): string => {
-    let otp = '';
-    for (let i = 0; i < length; i++) {
-        otp += Math.floor(Math.random() * 10).toString();
-    }
-    return otp;
+  let otp = '';
+  for (let i = 0; i < length; i++) {
+    otp += Math.floor(Math.random() * 10).toString();
+  }
+  return otp;
 };
 
 const login = async (req: Request, res: Response) => {
@@ -103,7 +103,7 @@ const register = async (req: Request, res: Response) => {
 
 const googleLogin = async (req: Request, res: Response) => {
   try {
-    const { token } = req.body; 
+    const { token } = req.body;
 
     const result = await authService.loginWithGoogle(token);
 
@@ -113,10 +113,10 @@ const googleLogin = async (req: Request, res: Response) => {
       accessToken: result.token
     });
   } catch (error: any) {
-    console.log("CHI TIẾT LỖI SERVICE:", error); 
-    res.status(401).json({ 
-      message: 'Xác thực Google thất bại', 
-      error: error.message 
+    console.log("CHI TIẾT LỖI SERVICE:", error);
+    res.status(401).json({
+      message: 'Xác thực Google thất bại',
+      error: error.message
     });
   }
 };
@@ -137,7 +137,7 @@ const facebookLogin = async (req: Request, res: Response) => {
       accessToken: result.token
     });
   } catch (error: any) {
-        console.log("CHI TIẾT LỖI SERVICE:", error); 
+    console.log("CHI TIẾT LỖI SERVICE:", error);
 
     res.status(401).json({
       message: 'Xác thực Facebook thất bại',
@@ -161,8 +161,8 @@ const forgetPass = async (req: Request, res: Response) => {
     const otpCode = generateOTP(6);
     const secret = process.env.JWT_SECRET || 'default_secret';
     const tempToken = jwt.sign(
-      { email, otp: otpCode }, 
-        secret, 
+      { email, otp: otpCode },
+      secret,
       { expiresIn: '5m' }
     );
 
@@ -179,73 +179,73 @@ const forgetPass = async (req: Request, res: Response) => {
 };
 
 const verifyOTP = async (req: any, res: Response) => {
-    try {
-        const { email, otp, tempToken } = req.body;
+  try {
+    const { email, otp, tempToken } = req.body;
 
-        if (!tempToken || !otp) {
-            return res.status(400).json({ message: 'Thiếu thông tin mã xác thực hoặc OTP!' });
-        }
-
-        const secret = process.env.JWT_SECRET || 'default_secret';
-        let decoded: any;
-
-        // Kiểm tra token tạm có hợp lệ và hết hạn chưa (5 phút)
-        try {
-            decoded = jwt.verify(tempToken, secret);
-        } catch (err) {
-            return res.status(400).json({ message: 'Mã OTP đã hết hạn hoặc không hợp lệ!' });
-        }
-
-        // Kiểm tra xem email và mã OTP có khớp không
-        if (decoded.email !== email || decoded.otp !== otp) {
-            return res.status(400).json({ message: 'Mã OTP không chính xác!' });
-        }
-
-        return res.status(200).json({ message: 'Xác thực OTP thành công!' });
-
-    } catch (error: any) {
-        console.log("LỖI VERIFY OTP:", error);
-        return res.status(500).json({ message: 'Lỗi server', error: error.message });
+    if (!tempToken || !otp) {
+      return res.status(400).json({ message: 'Thiếu thông tin mã xác thực hoặc OTP!' });
     }
+
+    const secret = process.env.JWT_SECRET || 'default_secret';
+    let decoded: any;
+
+    // Kiểm tra token tạm có hợp lệ và hết hạn chưa (5 phút)
+    try {
+      decoded = jwt.verify(tempToken, secret);
+    } catch (err) {
+      return res.status(400).json({ message: 'Mã OTP đã hết hạn hoặc không hợp lệ!' });
+    }
+
+    // Kiểm tra xem email và mã OTP có khớp không
+    if (decoded.email !== email || decoded.otp !== otp) {
+      return res.status(400).json({ message: 'Mã OTP không chính xác!' });
+    }
+
+    return res.status(200).json({ message: 'Xác thực OTP thành công!' });
+
+  } catch (error: any) {
+    console.log("LỖI VERIFY OTP:", error);
+    return res.status(500).json({ message: 'Lỗi server', error: error.message });
+  }
 };
 
 const resetPass = async (req: any, res: Response) => {
-    try {
-        const { email, tempToken, newPassword } = req.body;
+  try {
+    const { email, tempToken, newPassword } = req.body;
 
-        if (!tempToken || !newPassword) {
-            return res.status(400).json({ message: 'Thiếu thông tin cần thiết!' });
-        }
-
-        const secret = process.env.JWT_SECRET || 'default_secret';
-        let decoded: any;
-
-        try {
-            decoded = jwt.verify(tempToken, secret);
-        } catch (err) {
-            return res.status(400).json({ message: 'Phiên làm việc đã hết hạn. Vui lòng thử lại!' });
-        }
-
-        if (decoded.email !== email) {
-            return res.status(400).json({ message: 'Thông tin xác thực không khớp!' });
-        }
-
-        // Mã hóa mật khẩu mới trước khi lưu vào Prisma
-        const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-        await prisma.user.update({
-            where: { email },
-            data: { password: hashedPassword },
-        });
-
-        return res.status(200).json({ 
-            message: 'Đặt lại mật khẩu thành công! Bạn có thể đăng nhập bằng mật khẩu mới.' 
-        });
-
-    } catch (error: any) {
-        console.log("CHI TIẾT LỖI RESET PASS:", error);
-        return res.status(500).json({ message: 'Lỗi server', error: error.message });
+    if (!tempToken || !newPassword) {
+      return res.status(400).json({ message: 'Thiếu thông tin cần thiết!' });
     }
+
+    const secret = process.env.JWT_SECRET || 'default_secret';
+    let decoded: any;
+
+    try {
+      decoded = jwt.verify(tempToken, secret);
+    } catch (err) {
+      return res.status(400).json({ message: 'Phiên làm việc đã hết hạn. Vui lòng thử lại!' });
+    }
+
+    if (decoded.email !== email) {
+      return res.status(400).json({ message: 'Thông tin xác thực không khớp!' });
+    }
+
+    // Mã hóa mật khẩu mới trước khi lưu vào Prisma
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await prisma.user.update({
+      where: { email },
+      data: { passwordHash: hashedPassword },
+    });
+
+    return res.status(200).json({
+      message: 'Đặt lại mật khẩu thành công! Bạn có thể đăng nhập bằng mật khẩu mới.'
+    });
+
+  } catch (error: any) {
+    console.log("CHI TIẾT LỖI RESET PASS:", error);
+    return res.status(500).json({ message: 'Lỗi server', error: error.message });
+  }
 };
 
 /*
