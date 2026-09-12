@@ -13,8 +13,8 @@ app.use(cors());
 app.use(express.json());
 
 prisma.$connect()
-  .then(() => console.log('✅ Đã kết nối Database PostgreSQL thành công!'))
-  .catch((err: Error) => console.error('❌ Lỗi kết nối Database:', err));
+  .then(() => console.log('Đã kết nối Database PostgreSQL thành công!'))
+  .catch((err: Error) => console.error('Lỗi kết nối Database:', err));
 
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);

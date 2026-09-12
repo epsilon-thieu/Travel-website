@@ -3,8 +3,6 @@ import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import authService from '../services/authService';
-import { getRandomValues } from 'crypto';
-import SendmailTransport from 'nodemailer/lib/sendmail-transport';
 
 const prisma = new PrismaClient();
 
@@ -217,11 +215,25 @@ const resetPass = async (req: Request, res: Response) => {
   }
 };
 
+/*
+const refreshLogin = async (req: Request, res: Response) => {(
+
+)};
+*/
+
+/*
+const logOut = async (req: Request, res: Response) => {(
+
+)};
+*/
+
 export default {
   login,
   register,
   googleLogin,
   facebookLogin,
   forgetPass,
+  //refreshLogin,
+  //logOut,
   resetPass
 };
