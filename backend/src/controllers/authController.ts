@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, response, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -178,41 +178,74 @@ const forgetPass = async (req: Request, res: Response) => {
   }
 };
 
-const resetPass = async (req: Request, res: Response) => {
-  try {
-    const { email, otp, tempToken, newPassword } = req.body;
-
-    if (!tempToken) {
-      return res.status(400).json({ message: 'Thiếu mã xác thực tạm thời! Vui lòng thao tác lại từ đầu.' });
-    }
-
-    const secret = process.env.JWT_SECRET || 'default_secret';
-    let decoded: any;
-
+const verifyOTP = async (req: any, res: Response) => {
     try {
-      decoded = jwt.verify(tempToken, secret);
-    } catch (err) {
-      return res.status(400).json({ message: 'Mã OTP đã hết hạn hoặc không hợp lệ!' });
+        const { email, otp, tempToken } = req.body;
+
+        if (!tempToken || !otp) {
+            return res.status(400).json({ message: 'Thiếu thông tin mã xác thực hoặc OTP!' });
+        }
+
+        const secret = process.env.JWT_SECRET || 'default_secret';
+        let decoded: any;
+
+        // Kiểm tra token tạm có hợp lệ và hết hạn chưa (5 phút)
+        try {
+            decoded = jwt.verify(tempToken, secret);
+        } catch (err) {
+            return res.status(400).json({ message: 'Mã OTP đã hết hạn hoặc không hợp lệ!' });
+        }
+
+        // Kiểm tra xem email và mã OTP có khớp không
+        if (decoded.email !== email || decoded.otp !== otp) {
+            return res.status(400).json({ message: 'Mã OTP không chính xác!' });
+        }
+
+        return res.status(200).json({ message: 'Xác thực OTP thành công!' });
+
+    } catch (error: any) {
+        console.log("LỖI VERIFY OTP:", error);
+        return res.status(500).json({ message: 'Lỗi server', error: error.message });
     }
+};
 
-    if (decoded.email !== email || decoded.otp !== otp) {
-      return res.status(400).json({ message: 'Mã OTP không chính xác!' });
+const resetPass = async (req: any, res: Response) => {
+    try {
+        const { email, tempToken, newPassword } = req.body;
+
+        if (!tempToken || !newPassword) {
+            return res.status(400).json({ message: 'Thiếu thông tin cần thiết!' });
+        }
+
+        const secret = process.env.JWT_SECRET || 'default_secret';
+        let decoded: any;
+
+        try {
+            decoded = jwt.verify(tempToken, secret);
+        } catch (err) {
+            return res.status(400).json({ message: 'Phiên làm việc đã hết hạn. Vui lòng thử lại!' });
+        }
+
+        if (decoded.email !== email) {
+            return res.status(400).json({ message: 'Thông tin xác thực không khớp!' });
+        }
+
+        // Mã hóa mật khẩu mới trước khi lưu vào Prisma
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        await prisma.user.update({
+            where: { email },
+            data: { password: hashedPassword },
+        });
+
+        return res.status(200).json({ 
+            message: 'Đặt lại mật khẩu thành công! Bạn có thể đăng nhập bằng mật khẩu mới.' 
+        });
+
+    } catch (error: any) {
+        console.log("CHI TIẾT LỖI RESET PASS:", error);
+        return res.status(500).json({ message: 'Lỗi server', error: error.message });
     }
-
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-    await prisma.user.update({
-      where: { email },
-      data: { password: hashedPassword },
-    });
-    return res.status(200).json({ 
-      message: 'Đặt lại mật khẩu thành công! Bạn có thể đăng nhập bằng mật khẩu mới.' 
-    });
-  }
-
-  catch (error: any) {
-    console.log("CHI TIẾT LỖI SERVICE:", error);
-  }
 };
 
 /*
@@ -235,5 +268,6 @@ export default {
   forgetPass,
   //refreshLogin,
   //logOut,
+  verifyOTP,
   resetPass
 };
