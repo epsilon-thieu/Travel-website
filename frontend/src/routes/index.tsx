@@ -13,6 +13,7 @@ import { HotelsPage } from '../pages/user/SearchPages/HotelsPage';
 import { AboutUsPage } from '../pages/user/SearchPages/AboutUsPage';
 import VerifyOtp from '../pages/auth/VerifyOtp';
 import ResetPassword from '../pages/auth/ResetPasswordPage';
+import { TourDetailPage } from '../pages/user/SearchPages/TourDetailPage';
 
 // Loader: Chặn người dùng ĐÃ CÓ token quay lại trang Login/Register
 const requireGuest = () => {
@@ -39,6 +40,7 @@ export const router = createBrowserRouter([
         children: [
             { index: true, element: <HomePage /> },
             { path: 'tours', element: <ToursPage /> },
+            { path: 'tours/:id', element: <TourDetailPage /> },
             { path: 'flights', element: <FlightsPage /> },
             { path: 'hotels', element: <HotelsPage /> },
             { path: 'about', element: <AboutUsPage /> },
@@ -53,7 +55,7 @@ export const router = createBrowserRouter([
             { path: 'register', element: <RegisterPage /> },
             { path: 'forgot-password', element: <ForgotPasswordPage /> },
             { path: 'verify-otp', element: <VerifyOtp /> },
-            { path: '/reset-password-final', element: <ResetPassword /> }
+            { path: 'reset-password-final', element: <ResetPassword /> }
         ],
     },
     {
