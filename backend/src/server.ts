@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { PrismaClient } from '@prisma/client';
+import helmet from 'helmet';
 
 import userRoutes from './routes/userRoutes';
 import authRoutes from './routes/authRoutes';
@@ -11,6 +12,7 @@ const prisma = new PrismaClient();
 
 app.use(cors());
 app.use(express.json());
+app.use(helmet());
 
 prisma.$connect()
   .then(() => console.log('Đã kết nối Database PostgreSQL thành công!'))

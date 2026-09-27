@@ -1,73 +1,24 @@
-/* HomePage.css */
 @import "tailwindcss";
 
-@layer components {
+.home-hero {
+    position: relative;
+    display: flex;
+    min-height: min(760px, calc(100vh - 76px));
+    align-items: center;
+    overflow: hidden;
+    background-color: #222;
+    background-position: center;
+    background-size: cover;
+}
 
-    /* Khung nền tĩnh, không zoom */
-    .hero-section {
-        @apply relative w-full h-[85vh] min-h-[600px] bg-cover bg-center overflow-hidden;
-        background-image: url('https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?q=80&w=1920&auto=format&fit=crop');
-    }
+.home-hero-copy {
+    width: min(100%, 1280px);
+    margin-inline: auto;
+    padding: 100px 24px;
+}
 
-    /* Tiêu đề in to, font Serif nổi bật trên nền ảnh */
-    .hero-title-container {
-        @apply absolute top-[20%] left-6 md:left-20 z-10;
-        animation: fadeIn 0.8s ease-out forwards;
-        /* Đã thay đổi: Dùng CSS thuần thay vì @apply */
-    }
-
-    .hero-label-top {
-        @apply text-white text-lg md:text-xl font-bold tracking-[0.15em] uppercase drop-shadow-md mb-2 block;
-    }
-
-    .hero-title-main {
-        @apply text-6xl md:text-[7rem] lg:text-[8rem] font-black text-white uppercase leading-[0.85] drop-shadow-xl;
-        font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-    }
-
-    /* Khối màu vàng đặc trưng */
-    .hero-overlay-card {
-        @apply absolute bottom-0 left-0 md:bottom-12 md:left-20 w-full md:max-w-xl lg:max-w-2xl bg-[#FACC15] p-8 md:p-12 z-20 shadow-xl;
-        animation: fadeIn 0.8s ease-out forwards;
-        /* Đã thay đổi: Dùng CSS thuần thay vì @apply */
-    }
-
-    .hero-description {
-        @apply text-gray-900 text-base md:text-lg font-medium leading-relaxed mb-6;
-    }
-
-    /* Nút bấm viền đen tối giản */
-    .btn-dark-outline {
-        @apply inline-flex items-center gap-2 bg-gray-900 text-white px-8 py-3.5 rounded-full text-sm font-bold uppercase tracking-widest hover:bg-gray-800 transition-colors w-fit cursor-pointer;
-    }
-
-    /* Row chứa thông tin Tour */
-    .feature-row {
-        @apply flex items-center gap-8 mt-6 pt-6 border-t border-gray-900/15;
-    }
-
-    .feature-item {
-        @apply flex flex-col text-gray-900;
-    }
-
-    .feature-label {
-        @apply text-xs font-bold uppercase tracking-wider text-gray-700 mb-1;
-    }
-
-    .feature-value {
-        @apply text-base font-black;
-    }
-
-    /* Layout cho phần map API bên dưới */
-    .section-container {
-        @apply max-w-7xl mx-auto px-6 py-20 flex flex-col gap-20;
-    }
-
-    .section-header {
-        @apply text-3xl md:text-4xl font-black text-gray-900 uppercase tracking-tighter mb-8;
-    }
-
-    .api-placeholder {
-        @apply flex items-center justify-center min-h-[250px] bg-gray-50 border-2 border-dashed border-gray-200 p-8 text-gray-500 font-medium;
+@media (min-width: 768px) {
+    .home-hero-copy {
+        padding-inline: 48px;
     }
 }

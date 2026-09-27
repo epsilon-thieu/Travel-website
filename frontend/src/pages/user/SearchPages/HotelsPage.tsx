@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { MapPin, Calendar, Users, Building2, ArrowRight } from 'lucide-react';
 import DatePicker from '../../../components/common/DatePicker';
 import { styles } from './SharePagesStyle';
@@ -8,10 +8,7 @@ export const HotelsPage: React.FC = () => {
     const [checkIn, setCheckIn] = useState<Date | null>(null);
     const [checkOut, setCheckOut] = useState<Date | null>(null);
     const [guests, setGuests] = useState('1');
-    const [hotels, setHotels] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-
-    useEffect(() => { }, []);
 
     const handleSearch = () => {
         console.log("Searching Hotels:", { location, checkIn, checkOut, guests });

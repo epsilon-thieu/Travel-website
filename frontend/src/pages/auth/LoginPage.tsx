@@ -14,6 +14,8 @@ export const LoginPage: React.FC = () => {
     const [showPassword, setShowPassword] = useState(false);
 
     const navigate = useNavigate();
+    const nextPath = new URLSearchParams(window.location.search).get('next');
+    const postLoginPath = nextPath?.startsWith('/') && !nextPath.startsWith('//') ? nextPath : '/';
 
     // 2. Tạo method xử lý submit form
     const loginCustomGoogle = useGoogleLogin({
@@ -32,7 +34,7 @@ export const LoginPage: React.FC = () => {
                 if (response.ok) {
                     console.log('Đăng nhập Google thành công:', data);
                     localStorage.setItem('token', data.accessToken);
-                    navigate('/');
+                    navigate(postLoginPath);
                 } else {
                     alert(data.message || 'Xác thực Google tại Server thất bại!');
                 }
@@ -58,7 +60,7 @@ export const LoginPage: React.FC = () => {
             const data = await response.json();
             if (response.ok) {
                 localStorage.setItem('token', data.accessToken);
-                navigate('/dashboard');
+                navigate(postLoginPath);
             } else alert(data.message || 'Xác thực Facebook thất bại!');
         } catch (error) {
             console.error(error);
@@ -84,7 +86,7 @@ export const LoginPage: React.FC = () => {
 
                 localStorage.setItem('token', data.accessToken);
 
-                navigate('/dashboard');
+                navigate(postLoginPath);
             } else {
                 alert(data.message || 'Đăng nhập thất bại!');
             }

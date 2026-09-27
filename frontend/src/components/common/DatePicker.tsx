@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const WEEKDAYS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"] as const;
 const MONTHS = [
@@ -89,31 +89,32 @@ export default function DatePicker({
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center justify-between gap-3 bg-transparent px-5 text-left transition-all focus:outline-none cursor-pointer"
+        aria-label="Chọn ngày khởi hành"
+        className="flex w-full items-center justify-between gap-3 bg-transparent px-0 text-left transition-all focus:outline-none cursor-pointer"
       >
-        <span className={value ? "text-white" : "text-white/40"}>
+        <span className={value ? "text-black" : "text-gray-400"}>
           {value ? formatDate(value) : placeholder}
         </span>
       </button>
 
       {open && (
-        <div className="absolute z-[999] mt-2 w-80 rounded-2xl border border-white/10 bg-neutral-900/90 p-4 shadow-2xl backdrop-blur-xl">
+        <div className="absolute z-[999] mt-2 w-80 rounded-2xl border border-gray-200 bg-white p-4 text-gray-900 shadow-2xl">
           {/* Month nav */}
           <div className="mb-4 flex items-center justify-between">
             <button
               type="button"
               onClick={goPrevMonth}
-              className="rounded-lg p-1.5 text-white/60 transition-colors hover:bg-white/10 hover:text-white"
+              className="rounded-lg p-1.5 text-gray-500 transition-colors hover:bg-gray-100 hover:text-black"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
-            <span className="text-sm font-semibold text-white">
+            <span className="text-sm font-semibold text-gray-900">
               {MONTHS[month]} {year}
             </span>
             <button
               type="button"
               onClick={goNextMonth}
-              className="rounded-lg p-1.5 text-white/60 transition-colors hover:bg-white/10 hover:text-white"
+              className="rounded-lg p-1.5 text-gray-500 transition-colors hover:bg-gray-100 hover:text-black"
             >
               <ChevronRight className="h-4 w-4" />
             </button>
@@ -124,7 +125,7 @@ export default function DatePicker({
             {WEEKDAYS.map((d) => (
               <div
                 key={d}
-                className="flex h-8 items-center justify-center text-xs font-medium text-white/40"
+                className="flex h-8 items-center justify-center text-xs font-medium text-gray-500"
               >
                 {d}
               </div>
@@ -147,11 +148,11 @@ export default function DatePicker({
                   className={[
                     "flex h-9 w-9 items-center justify-center rounded-lg text-sm transition-colors",
                     !date ? "invisible" : "",
-                    disabled ? "cursor-not-allowed text-white/20" : "text-white/80 hover:bg-white/10",
+                    disabled ? "cursor-not-allowed text-gray-300" : "text-gray-800 hover:bg-gray-100",
                     selected
-                      ? "bg-emerald-400 font-semibold text-neutral-900 hover:bg-emerald-400"
+                      ? "bg-black font-semibold text-white hover:bg-black"
                       : "",
-                    today && !selected ? "border border-emerald-400/50" : "",
+                    today && !selected ? "border border-gray-400" : "",
                   ].join(" ")}
                 >
                   {date ? date.getDate() : ""}
@@ -161,21 +162,21 @@ export default function DatePicker({
           </div>
 
           {/* Footer */}
-          <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-3">
+          <div className="mt-4 flex items-center justify-between border-t border-gray-200 pt-3">
             <button
               type="button"
               onClick={() => {
                 onChange(null);
                 setOpen(false);
               }}
-              className="text-xs font-medium text-white/50 hover:text-white"
+              className="text-xs font-medium text-gray-500 hover:text-black"
             >
               Clear
             </button>
             <button
               type="button"
               onClick={() => handlePick(new Date())}
-              className="rounded-lg bg-emerald-400 px-3 py-1.5 text-xs font-semibold text-neutral-900 hover:bg-emerald-300"
+              className="rounded-lg bg-black px-3 py-1.5 text-xs font-semibold text-white hover:bg-gray-800"
             >
               Today
             </button>

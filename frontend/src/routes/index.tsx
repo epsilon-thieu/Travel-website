@@ -1,4 +1,3 @@
-import React from 'react';
 import { createBrowserRouter, redirect } from 'react-router-dom';
 import { UserLayout } from '../layouts/UserLayout';
 import { AdminLayout } from '../layouts/AdminLayout';
@@ -8,6 +7,7 @@ import { RegisterPage } from '../pages/auth/RegisterPage';
 import { ForgotPasswordPage } from '../pages/auth/ForgotPasswordPage';
 import { HomePage } from '../pages/user/HomePage';
 import { ToursPage } from '../pages/user/SearchPages/ToursPage';
+import { TourDetailPage } from '../pages/user/SearchPages/TourDetailPage';
 import { FlightsPage } from '../pages/user/SearchPages/FlightsPage';
 import { HotelsPage } from '../pages/user/SearchPages/HotelsPage';
 import { AboutUsPage } from '../pages/user/SearchPages/AboutUsPage';
@@ -37,6 +37,7 @@ export const router = createBrowserRouter([
         children: [
             { index: true, element: <HomePage /> },
             { path: 'tours', element: <ToursPage /> },
+            { path: 'tours/:id', element: <TourDetailPage /> },
             { path: 'flights', element: <FlightsPage /> },
             { path: 'hotels', element: <HotelsPage /> },
             { path: 'about', element: <AboutUsPage /> },

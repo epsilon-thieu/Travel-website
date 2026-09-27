@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { Search, ShoppingCart, User, LogOut, Info, ChevronDown } from 'lucide-react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setProfile, clearProfile } from '../redux/userSlice'; // Import actions từ Redux
 import './UserLayout.css';
 

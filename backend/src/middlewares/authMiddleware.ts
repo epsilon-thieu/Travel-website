@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import rateLimit from 'express-rate-limit';
 import jwt from 'jsonwebtoken';
 
 export interface AuthRequest extends Request {
@@ -32,3 +33,9 @@ export const checkAdmin = (req: AuthRequest, res: Response, next: NextFunction) 
     res.status(403).json({ message: 'Cảnh báo: Chỉ Admin mới được thực hiện hành động này!' });
   }
 };
+
+export const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: { message: 'Bạn đã thử quá nhiều lần. Vui lòng quay lại sau 15 phút!' }
+});

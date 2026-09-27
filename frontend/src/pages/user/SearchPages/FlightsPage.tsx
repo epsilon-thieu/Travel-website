@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { PlaneTakeoff, PlaneLanding, Calendar, Users, ArrowRight } from 'lucide-react';
 import DatePicker from '../../../components/common/DatePicker';
 import { styles } from './SharePagesStyle';
@@ -8,10 +8,7 @@ export const FlightsPage: React.FC = () => {
     const [arrival, setArrival] = useState('');
     const [date, setDate] = useState<Date | null>(null);
     const [passengers, setPassengers] = useState('1');
-    const [flights, setFlights] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-
-    useEffect(() => { }, []);
 
     const handleSearch = () => {
         console.log("Searching Flights:", { departure, arrival, date, passengers });
