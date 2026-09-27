@@ -22,8 +22,12 @@ export const ForgotPasswordPage: React.FC = () => {
             const data = await response.json();
 
             if (response.ok) {
+                if (data.tempToken) {
+                    localStorage.setItem('tempToken', data.tempToken);
+                }
+
                 alert('Mã OTP đã được gửi về email của bạn! Vui lòng kiểm tra hộp thư.');
-                
+
                 navigate('/verify-otp', { state: { email } });
             } else {
                 alert(data.message || 'Không thể gửi yêu cầu!');
