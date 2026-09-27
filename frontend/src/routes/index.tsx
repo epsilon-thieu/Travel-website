@@ -13,7 +13,6 @@ import { HotelsPage } from '../pages/user/SearchPages/HotelsPage';
 import { AboutUsPage } from '../pages/user/SearchPages/AboutUsPage';
 import VerifyOtp from '../pages/auth/VerifyOtp';
 import ResetPassword from '../pages/auth/ResetPasswordPage';
-import { TourDetailPage } from '../pages/user/SearchPages/TourDetailPage';
 
 // Loader: Chặn người dùng ĐÃ CÓ token quay lại trang Login/Register
 const requireGuest = () => {
